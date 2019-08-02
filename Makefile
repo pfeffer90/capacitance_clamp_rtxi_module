@@ -1,9 +1,9 @@
-PLUGIN_NAME = plugin_template
+PLUGIN_NAME = capacitance_clamp_rtxi_module
 
-HEADERS = plugin-template.h
+HEADERS = capacitance_clamp_rtxi_module.h
 
-SOURCES = plugin-template.cpp\
-          moc_plugin-template.cpp\
+SOURCES = capacitance_clamp_rtxi_module.cpp\
+          moc_capacitance_clamp_rtxi_module.cpp\
 
 LIBS = 
 

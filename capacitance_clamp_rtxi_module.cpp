@@ -21,14 +21,14 @@
  * DefaultGUIModel with a custom GUI.
  */
 
-#include "plugin-template.h"
+#include "capacitance_clamp_rtxi_module.h"
 #include <iostream>
 #include <main_window.h>
 
 extern "C" Plugin::Object*
 createRTXIPlugin(void)
 {
-  return new PluginTemplate();
+  return new CapacitanceClampRtxiModule();
 }
 
 static DefaultGUIModel::variable_t vars[] = {
@@ -43,10 +43,10 @@ static DefaultGUIModel::variable_t vars[] = {
 
 static size_t num_vars = sizeof(vars) / sizeof(DefaultGUIModel::variable_t);
 
-PluginTemplate::PluginTemplate(void)
-  : DefaultGUIModel("PluginTemplate with Custom GUI", ::vars, ::num_vars)
+CapacitanceClampRtxiModule::CapacitanceClampRtxiModule(void)
+  : DefaultGUIModel("CapacitanceClampRtxiModule with Custom GUI", ::vars, ::num_vars)
 {
-  setWhatsThis("<p><b>PluginTemplate:</b><br>QWhatsThis description.</p>");
+  setWhatsThis("<p><b>CapacitanceClampRtxiModule:</b><br>QWhatsThis description.</p>");
   DefaultGUIModel::createGUI(vars,
                              num_vars); // this is required to create the GUI
   customizeGUI();
@@ -58,25 +58,25 @@ PluginTemplate::PluginTemplate(void)
   QTimer::singleShot(0, this, SLOT(resizeMe()));
 }
 
-PluginTemplate::~PluginTemplate(void)
+CapacitanceClampRtxiModule::~CapacitanceClampRtxiModule(void)
 {
 }
 
 void
-PluginTemplate::execute(void)
+CapacitanceClampRtxiModule::execute(void)
 {
   return;
 }
 
 void
-PluginTemplate::initParameters(void)
+CapacitanceClampRtxiModule::initParameters(void)
 {
   some_parameter = 0;
   some_state = 0;
 }
 
 void
-PluginTemplate::update(DefaultGUIModel::update_flags_t flag)
+CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag)
 {
   switch (flag) {
     case INIT:
@@ -105,7 +105,7 @@ PluginTemplate::update(DefaultGUIModel::update_flags_t flag)
 }
 
 void
-PluginTemplate::customizeGUI(void)
+CapacitanceClampRtxiModule::customizeGUI(void)
 {
   QGridLayout* customlayout = DefaultGUIModel::getLayout();
 
@@ -126,11 +126,11 @@ PluginTemplate::customizeGUI(void)
 
 // functions designated as Qt slots are implemented as regular C++ functions
 void
-PluginTemplate::aBttn_event(void)
+CapacitanceClampRtxiModule::aBttn_event(void)
 {
 }
 
 void
-PluginTemplate::bBttn_event(void)
+CapacitanceClampRtxiModule::bBttn_event(void)
 {
 }
