@@ -28,8 +28,14 @@ Capacitance clamp module for [RTXI](http://rtxi.org)
 
 ### Development
 
-Tests written with [gtest](https://github.com/google/googletest/blob/master/googletest/docs/primer.md).
-
+Tests written with [gtest](https://github.com/google/googletest/blob/master/googletest/docs/primer.md). Gtests is
+ part of the repro as a [git submodule](https://git-scm.com/book/de/v1/Git-Tools-Submodule). To download it run
+ ```
+git submodule init
+git submodule update
+```
+ 
+ 
 Tests can be run within Clion or from the command line via
 ```bash
 mkdir build
