@@ -28,4 +28,6 @@ moc_*
 *.out
 *.app
 
-
+# Cmake Build System
+build
+cmake-build-debug
