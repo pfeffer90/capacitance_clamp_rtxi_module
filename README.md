@@ -25,3 +25,15 @@ Capacitance clamp module for [RTXI](http://rtxi.org)
 - somehow run part of the code out of RTXI, testing environment (Problem, Clion does not seem to like the plugin code
  and reports a lot of errors, alternative would be to get another source file into the compilation)
 - a CMake Project to use the full functionality of CLion
+
+### Development
+
+Tests written with [gtest](https://github.com/google/googletest/blob/master/googletest/docs/primer.md).
+
+Tests can be run within Clion or from the command line via
+```bash
+mkdir build
+cd build
+cmake ..
+make check
+```
