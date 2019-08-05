@@ -22,6 +22,7 @@
  */
 
 #include "capacitance_clamp_rtxi_module.h"
+#include "capacitance_clamp_lib.h"
 #include <iostream>
 #include <main_window.h>
 
@@ -71,7 +72,7 @@ CapacitanceClampRtxiModule::execute(void)
 void
 CapacitanceClampRtxiModule::initParameters(void)
 {
-  some_parameter = 0;
+  some_parameter = initialize_my_awesome_parameter();
   some_state = 0;
 }
 

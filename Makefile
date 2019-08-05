@@ -1,8 +1,10 @@
 PLUGIN_NAME = capacitance_clamp_rtxi_module
 
-HEADERS = capacitance_clamp_rtxi_module.h
+HEADERS = capacitance_clamp_lib.h\
+           capacitance_clamp_rtxi_module.h\
 
-SOURCES = capacitance_clamp_rtxi_module.cpp\
+SOURCES = capacitance_clamp_lib.cpp\
+          capacitance_clamp_rtxi_module.cpp\
           moc_capacitance_clamp_rtxi_module.cpp\
 
 LIBS = 
