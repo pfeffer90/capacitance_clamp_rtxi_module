@@ -17,14 +17,15 @@
  */
 
 /*
- * This is a template implementation file for a user module derived from
- * DefaultGUIModel with a custom GUI.
+ * This is an implementation of a capacitance clamp.
  */
 
 #include "capacitance_clamp_rtxi_module.h"
 #include "capacitance_clamp_lib.h"
 #include <iostream>
 #include <main_window.h>
+
+#define DEFAULT_CAPACITANCE 100
 
 extern "C" Plugin::Object*
 createRTXIPlugin(void)
@@ -34,18 +35,18 @@ createRTXIPlugin(void)
 
 static DefaultGUIModel::variable_t vars[] = {
   {
-    "GUI label", "Tooltip description",
+    "C_cell (pF)", "Actual capacitance of the cell in pF",
     DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
   },
   {
-    "A State", "Tooltip description", DefaultGUIModel::STATE,
+    "C_target (pF)", "Target capacitance in pF", DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
   },
 };
 
 static size_t num_vars = sizeof(vars) / sizeof(DefaultGUIModel::variable_t);
 
 CapacitanceClampRtxiModule::CapacitanceClampRtxiModule(void)
-  : DefaultGUIModel("CapacitanceClampRtxiModule with Custom GUI", ::vars, ::num_vars)
+  : DefaultGUIModel("Capacitance clamp", ::vars, ::num_vars)
 {
   setWhatsThis("<p><b>CapacitanceClampRtxiModule:</b><br>QWhatsThis description.</p>");
   DefaultGUIModel::createGUI(vars,
@@ -72,8 +73,8 @@ CapacitanceClampRtxiModule::execute(void)
 void
 CapacitanceClampRtxiModule::initParameters(void)
 {
-  some_parameter = initialize_my_awesome_parameter();
-  some_state = 0;
+  c_cell = DEFAULT_CAPACITANCE;
+  c_target = DEFAULT_CAPACITANCE;
 }
 
 void
@@ -82,12 +83,13 @@ CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag)
   switch (flag) {
     case INIT:
       period = RT::System::getInstance()->getPeriod() * 1e-6; // ms
-      setParameter("GUI label", some_parameter);
-      setState("A State", some_state);
+      setParameter("C_cell (pF)", c_cell);
+      setParameter("C_target (pF)", c_target);
       break;
 
     case MODIFY:
-      some_parameter = getParameter("GUI label").toDouble();
+        c_cell = getParameter("C_cell (pF)").toDouble();
+        c_target = getParameter("C_target (pF)").toDouble();
       break;
 
     case UNPAUSE:
@@ -108,30 +110,6 @@ CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag)
 void
 CapacitanceClampRtxiModule::customizeGUI(void)
 {
-  QGridLayout* customlayout = DefaultGUIModel::getLayout();
-
-  QGroupBox* button_group = new QGroupBox;
-
-  QPushButton* abutton = new QPushButton("Button A");
-  QPushButton* bbutton = new QPushButton("Button B");
-  QHBoxLayout* button_layout = new QHBoxLayout;
-  button_group->setLayout(button_layout);
-  button_layout->addWidget(abutton);
-  button_layout->addWidget(bbutton);
-  QObject::connect(abutton, SIGNAL(clicked()), this, SLOT(aBttn_event()));
-  QObject::connect(bbutton, SIGNAL(clicked()), this, SLOT(bBttn_event()));
-
-  customlayout->addWidget(button_group, 0, 0);
-  setLayout(customlayout);
+    //to add buttons or change the layout, have a look at the original plugin template code
 }
 
-// functions designated as Qt slots are implemented as regular C++ functions
-void
-CapacitanceClampRtxiModule::aBttn_event(void)
-{
-}
-
-void
-CapacitanceClampRtxiModule::bBttn_event(void)
-{
-}
