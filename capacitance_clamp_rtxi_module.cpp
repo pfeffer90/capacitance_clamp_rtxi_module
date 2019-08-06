@@ -35,6 +35,14 @@ createRTXIPlugin(void)
 
 static DefaultGUIModel::variable_t vars[] = {
   {
+    "Vm", "Membrane potential in mV",
+    DefaultGUIModel::INPUT | DefaultGUIModel::DOUBLE,
+  },
+  {
+    "I_clamp", "Capacitance clamp current in nA",
+    DefaultGUIModel::OUTPUT | DefaultGUIModel::DOUBLE,
+  },
+  {
     "C_cell (pF)", "Actual capacitance of the cell in pF",
     DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
   },
@@ -67,6 +75,7 @@ CapacitanceClampRtxiModule::~CapacitanceClampRtxiModule(void)
 void
 CapacitanceClampRtxiModule::execute(void)
 {
+    output(0) = 0.1*input(0);
   return;
 }
 
