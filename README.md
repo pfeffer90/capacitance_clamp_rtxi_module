@@ -10,11 +10,14 @@ Capacitance clamp module for [RTXI](http://rtxi.org)
 <!--end-->
 
 #### Input
+
 1. Vm - Membrane potential in mV
 
 #### Output
-2. I_clamp - Capacitance clamp current in nA
-####Parameters
+
+1. I_clamp - Capacitance clamp current in nA
+
+#### Parameters
 1. C_cell (pF) - Actual capacitance of the cell in pF
 2. C_tagret (pF) - Target capacitance in pF
 
