@@ -42,8 +42,8 @@ double CapacitanceClamp::get_period() {
 double CapacitanceClamp::get_clamping_current(double voltage){
     update_voltage(voltage);
 
-    double estimated_flowing_current = estimate_current();
-    double clamping_current = (c_cell-c_target)/c_target *estimated_flowing_current;
+    double estimated_flowing_current = estimate_current_in_nA();
+    double clamping_current = ((c_cell-c_target)/c_target) * estimated_flowing_current;
     if (number_of_voltage_measurements < 2) {
         clamping_current = 0;
     }
@@ -57,8 +57,8 @@ void CapacitanceClamp::update_voltage(double voltage) {
     number_of_voltage_measurements += 1;
 }
 
-double CapacitanceClamp::estimate_current() {
-    return 1e-3*c_cell*(v_curr-v_previous)/dynamic_clamp_period - i_previous;
+double CapacitanceClamp::estimate_current_in_nA() {
+    return 1e-3*c_cell*(v_curr-v_previous)/dynamic_clamp_period - i_previous; //1e-3*pF*mV/ms = nA
 }
 
 void CapacitanceClamp::reset_states() {

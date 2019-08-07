@@ -33,15 +33,15 @@ private:
     double dynamic_clamp_period; //ms
 
     int number_of_voltage_measurements{};
-    double v_previous{};
+    double v_previous{}; //mV
 
-    double v_curr{};
+    double v_curr{}; //mV
 
-    double i_previous{};
+    double i_previous{}; //nA
 
     void update_voltage(double voltage);
 
-    double estimate_current();
+    double estimate_current_in_nA();
 
     void update_current_state(double current);
 };
