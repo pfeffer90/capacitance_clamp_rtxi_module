@@ -100,6 +100,8 @@ CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag) {
         case MODIFY:
             capacitanceClamp.set_cell_capacitance(getParameter("C_cell (pF)").toDouble());
             capacitanceClamp.set_target_capacitance(getParameter("C_target (pF)").toDouble());
+            output(0) = 0;
+            capacitanceClamp.reset_states();
             break;
 
         case UNPAUSE:
@@ -107,6 +109,7 @@ CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag) {
             break;
 
         case PAUSE:
+            output(0) = 0;
             capacitanceClamp.reset_states();
             break;
 
