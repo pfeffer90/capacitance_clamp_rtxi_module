@@ -22,6 +22,11 @@
  */
 
 #include <default_gui_model.h>
+#include "capacitance_clamp_lib.h"
+
+#define DEFAULT_CAPACITANCE 100
+#define DEFAULT_PERIOD 1
+
 
 class CapacitanceClampRtxiModule : public DefaultGUIModel
 {
@@ -40,9 +45,7 @@ protected:
   virtual void update(DefaultGUIModel::update_flags_t);
 
 private:
-  double c_cell;
-  double c_target;
-  double period;
+  CapacitanceClamp capacitanceClamp = CapacitanceClamp(DEFAULT_CAPACITANCE, DEFAULT_CAPACITANCE, DEFAULT_PERIOD);
 
   void initParameters();
 
@@ -50,3 +53,5 @@ private slots:
   // these are custom functions that can also be connected to events
   // through the Qt API. they must be implemented in plugin_template.cpp
 };
+
+double get_period_from_RTXI_in_ms();

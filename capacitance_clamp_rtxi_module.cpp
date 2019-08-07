@@ -25,100 +25,105 @@
 #include <iostream>
 #include <main_window.h>
 
-#define DEFAULT_CAPACITANCE 100
 
-extern "C" Plugin::Object*
-createRTXIPlugin(void)
-{
-  return new CapacitanceClampRtxiModule();
+extern "C" Plugin::Object *
+createRTXIPlugin(void) {
+    return new CapacitanceClampRtxiModule();
 }
 
 static DefaultGUIModel::variable_t vars[] = {
-  {
-    "Vm", "Membrane potential in mV",
-    DefaultGUIModel::INPUT | DefaultGUIModel::DOUBLE,
-  },
-  {
-    "I_clamp", "Capacitance clamp current in nA",
-    DefaultGUIModel::OUTPUT | DefaultGUIModel::DOUBLE,
-  },
-  {
-    "C_cell (pF)", "Actual capacitance of the cell in pF",
-    DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
-  },
-  {
-    "C_target (pF)", "Target capacitance in pF", DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
-  },
+        {
+                "Vm",
+                "Membrane potential in mV",
+                DefaultGUIModel::INPUT | DefaultGUIModel::DOUBLE,
+        },
+        {
+                "I_clamp",
+                "Capacitance clamp current in nA",
+                DefaultGUIModel::OUTPUT | DefaultGUIModel::DOUBLE,
+        },
+        {
+                "C_cell (pF)",
+                "Actual capacitance of the cell in pF",
+                DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
+        },
+        {
+                "C_target (pF)",
+                "Target capacitance in pF",
+                DefaultGUIModel::PARAMETER | DefaultGUIModel::DOUBLE,
+        },
 };
 
 static size_t num_vars = sizeof(vars) / sizeof(DefaultGUIModel::variable_t);
 
 CapacitanceClampRtxiModule::CapacitanceClampRtxiModule(void)
-  : DefaultGUIModel("Capacitance clamp", ::vars, ::num_vars)
-{
-  setWhatsThis("<p><b>CapacitanceClampRtxiModule:</b><br>QWhatsThis description.</p>");
-  DefaultGUIModel::createGUI(vars,
-                             num_vars); // this is required to create the GUI
-  customizeGUI();
-  initParameters();
-  update(INIT); // this is optional, you may place initialization code directly
-                // into the constructor
-  refresh();    // this is required to update the GUI with parameter and state
-                // values
-  QTimer::singleShot(0, this, SLOT(resizeMe()));
+        : DefaultGUIModel("Capacitance clamp", ::vars, ::num_vars) {
+    setWhatsThis("<p><b>CapacitanceClampRtxiModule:</b><br>QWhatsThis description.</p>");
+    DefaultGUIModel::createGUI(vars,
+                               num_vars); // this is required to create the GUI
+    customizeGUI();
+    initParameters();
+    update(INIT); // this is optional, you may place initialization code directly
+    // into the constructor
+    refresh();    // this is required to update the GUI with parameter and state
+    // values
+    QTimer::singleShot(0, this, SLOT(resizeMe()));
 }
 
-CapacitanceClampRtxiModule::~CapacitanceClampRtxiModule(void)
-{
-}
-
-void
-CapacitanceClampRtxiModule::execute(void)
-{
-    output(0) = 0.1*input(0);
-  return;
+CapacitanceClampRtxiModule::~CapacitanceClampRtxiModule(void) {
 }
 
 void
-CapacitanceClampRtxiModule::initParameters(void)
-{
-  c_cell = DEFAULT_CAPACITANCE;
-  c_target = DEFAULT_CAPACITANCE;
+CapacitanceClampRtxiModule::execute(void) {
+    output(0) = capacitanceClamp.get_clamping_current(input(0));
+    return;
 }
 
 void
-CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag)
-{
-  switch (flag) {
-    case INIT:
-      period = RT::System::getInstance()->getPeriod() * 1e-6; // ms
-      setParameter("C_cell (pF)", c_cell);
-      setParameter("C_target (pF)", c_target);
-      break;
-
-    case MODIFY:
-        c_cell = getParameter("C_cell (pF)").toDouble();
-        c_target = getParameter("C_target (pF)").toDouble();
-      break;
-
-    case UNPAUSE:
-      break;
-
-    case PAUSE:
-      break;
-
-    case PERIOD:
-      period = RT::System::getInstance()->getPeriod() * 1e-6; // ms
-      break;
-
-    default:
-      break;
-  }
+CapacitanceClampRtxiModule::initParameters(void) {
+    double c_cell = DEFAULT_CAPACITANCE;
+    double c_target = DEFAULT_CAPACITANCE;
+    double period = get_period_from_RTXI_in_ms();
+    capacitanceClamp.set_cell_capacitance(DEFAULT_CAPACITANCE);
+    capacitanceClamp.set_target_capacitance(DEFAULT_CAPACITANCE);
+    capacitanceClamp.set_period(period);
 }
 
 void
-CapacitanceClampRtxiModule::customizeGUI(void)
-{
+CapacitanceClampRtxiModule::update(DefaultGUIModel::update_flags_t flag) {
+    switch (flag) {
+        case INIT:
+            setParameter("C_cell (pF)", capacitanceClamp.get_cell_capacitance());
+            setParameter("C_target (pF)", capacitanceClamp.get_target_capacitance());
+            break;
+
+        case MODIFY:
+            capacitanceClamp.set_cell_capacitance(getParameter("C_cell (pF)").toDouble());
+            capacitanceClamp.set_target_capacitance(getParameter("C_target (pF)").toDouble());
+            break;
+
+        case UNPAUSE:
+
+            break;
+
+        case PAUSE:
+            capacitanceClamp.reset_states();
+            break;
+
+        case PERIOD:
+            capacitanceClamp.set_period(get_period_from_RTXI_in_ms());
+            break;
+
+        default:
+            break;
+    }
+}
+
+void
+CapacitanceClampRtxiModule::customizeGUI(void) {
     //to add buttons or change the layout, have a look at the original plugin template code
 }
 
+double get_period_from_RTXI_in_ms() {
+    return RT::System::getInstance()->getPeriod() * 1e-6; // ms
+}
