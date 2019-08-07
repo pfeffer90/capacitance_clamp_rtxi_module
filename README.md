@@ -1,4 +1,4 @@
-###Capacitance clamp
+### Capacitance clamp
 
 **Requirements:** None  
 **Limitations:** None  
@@ -18,7 +18,7 @@ Capacitance clamp module for [RTXI](http://rtxi.org)
 1. C_cell (pF) - Actual capacitance of the cell in pF
 2. C_tagret (pF) - Target capacitance in pF
 
-####States
+#### States
 None
 
 
